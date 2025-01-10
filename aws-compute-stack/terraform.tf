@@ -8,7 +8,7 @@ terraform {
   }
 }
 
-# Provider AWS Region
+# Provider for AWS Region
 provider "aws" {
   alias  = "aws_region"
   region = var.aws_region

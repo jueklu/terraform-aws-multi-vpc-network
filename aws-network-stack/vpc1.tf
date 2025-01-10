@@ -1,6 +1,7 @@
 # VPC 1
 resource "aws_vpc" "vpc1" {
-  cidr_block           = "10.10.0.0/16"
+  provider = aws.aws_region
+  cidr_block           = var.vpc1_cidr
   enable_dns_support   = true
   enable_dns_hostnames = true
 
@@ -11,39 +12,42 @@ resource "aws_vpc" "vpc1" {
 }
 
 
-# Public Subnet "us-east-1a", "10.10.0.0/24"
-resource "aws_subnet" "vpc1-subnet-public-us-east-1a" {
+# Public Subnet "10.10.0.0/24"
+resource "aws_subnet" "vpc1_subnet_public1" {
+  provider = aws.aws_region
   vpc_id                  = aws_vpc.vpc1.id
-  cidr_block              = "10.10.0.0/24"
-  availability_zone       = "us-east-1a"
+  cidr_block              = var.vpc1_subnet_cidr_1
+  availability_zone       = var.availability_zone_1
   map_public_ip_on_launch = true
 
   tags = {
-    Name      = "VPC1 Subnet-Public us-east-1a"
+    Name      = "VPC1 Subnet-Public-1"
     Env       = "Production"
   }
 }
 
-# Private Subnet "us-east-1b", "10.10.1.0/24"
-resource "aws_subnet" "vpc1-subnet-private-us-east-1b" {
+# Private Subnet "10.10.1.0/24"
+resource "aws_subnet" "vpc1_subnet_private1" {
+  provider = aws.aws_region
   vpc_id            = aws_vpc.vpc1.id
-  cidr_block        = "10.10.1.0/24"
-  availability_zone = "us-east-1b"
+  cidr_block        = var.vpc1_subnet_cidr_2
+  availability_zone = var.availability_zone_1
 
   tags = {
-    Name      = "VPC1 Subnet-Private us-east-1a"
+    Name      = "VPC1 Subnet-Private-1"
     Env       = "Production"
   }
 }
 
-# Private Subnet "us-east-1c", "10.10.2.0/24"
-resource "aws_subnet" "vpc1-subnet-private-us-east-1c" {
+# Private Subnet "10.10.2.0/24"
+resource "aws_subnet" "vpc1_subnet_private2" {
+  provider = aws.aws_region
   vpc_id            = aws_vpc.vpc1.id
-  cidr_block        = "10.10.2.0/24"
-  availability_zone = "us-east-1c"
+  cidr_block        = var.vpc1_subnet_cidr_3
+  availability_zone = var.availability_zone_2
 
   tags = {
-    Name      = "VPC1 Subnet-Private us-east-1b"
+    Name      = "VPC1 Subnet-Private-2"
     Env       = "Production"
   }
 }

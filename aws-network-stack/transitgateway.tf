@@ -1,5 +1,5 @@
 # Transit Gateway
-resource "aws_ec2_transit_gateway" "transit-gateway" {
+resource "aws_ec2_transit_gateway" "transit_gateway" {
   description = "Transit Gateway for inter-VPC communication"
   default_route_table_association = "enable"
   default_route_table_propagation = "enable"
@@ -15,14 +15,20 @@ resource "aws_ec2_transit_gateway" "transit-gateway" {
 
 
 # Transit Gateway Attachment VPC1
-resource "aws_ec2_transit_gateway_vpc_attachment" "vpc1-attachment" {
-  transit_gateway_id = aws_ec2_transit_gateway.transit-gateway.id
+resource "aws_ec2_transit_gateway_vpc_attachment" "vpc1_attachment" {
+  transit_gateway_id = aws_ec2_transit_gateway.transit_gateway.id
   vpc_id             = aws_vpc.vpc1.id
   subnet_ids         = [
-    aws_subnet.vpc1-subnet-public-us-east-1a.id,
-    aws_subnet.vpc1-subnet-private-us-east-1b.id,
-    aws_subnet.vpc1-subnet-private-us-east-1c.id
+    aws_subnet.vpc1_subnet_private1.id,
+    aws_subnet.vpc1_subnet_private2.id
   ]
+
+  depends_on = [
+    aws_subnet.vpc1_subnet_private1,
+    aws_subnet.vpc1_subnet_private2,
+    aws_ec2_transit_gateway.transit_gateway
+  ]
+
   tags = {
     Name = "VPC1-TGW-Attachment"
     Env  = "Production"
@@ -30,14 +36,20 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc1-attachment" {
 }
 
 # Transit Gateway Attachment VPC2
-resource "aws_ec2_transit_gateway_vpc_attachment" "vpc2-attachment" {
-  transit_gateway_id = aws_ec2_transit_gateway.transit-gateway.id
+resource "aws_ec2_transit_gateway_vpc_attachment" "vpc2_attachment" {
+  transit_gateway_id = aws_ec2_transit_gateway.transit_gateway.id
   vpc_id             = aws_vpc.vpc2.id
   subnet_ids         = [
-    aws_subnet.vpc2-subnet-public-us-east-1a.id,
-    aws_subnet.vpc2-subnet-private-us-east-1b.id,
-    aws_subnet.vpc2-subnet-private-us-east-1c.id
+    aws_subnet.vpc2_subnet_private1.id,
+    aws_subnet.vpc2_subnet_private2.id
   ]
+
+  depends_on = [
+    aws_subnet.vpc2_subnet_private1,
+    aws_subnet.vpc2_subnet_private2,
+    aws_ec2_transit_gateway.transit_gateway
+  ]
+
   tags = {
     Name = "VPC2-TGW-Attachment"
     Env  = "Production"
@@ -47,30 +59,38 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc2-attachment" {
 
 
 # Route in VPC1 private route table to reach VPC2
-resource "aws_route" "vpc1-to-vpc2" {
-  route_table_id         = aws_route_table.vpc1-private-routetable.id
+resource "aws_route" "vpc1_to_vpc2" {
+  route_table_id         = aws_route_table.vpc1_private_routetable.id
   destination_cidr_block = aws_vpc.vpc2.cidr_block
-  transit_gateway_id     = aws_ec2_transit_gateway.transit-gateway.id
+  transit_gateway_id     = aws_ec2_transit_gateway.transit_gateway.id
+
+  depends_on = [aws_ec2_transit_gateway.transit_gateway]
 }
 
 # Route in VPC1 public route table to reach VPC2 (if needed)
-resource "aws_route" "vpc1-public-to-vpc2" {
-  route_table_id         = aws_route_table.vpc1-public-routetable.id
+resource "aws_route" "vpc1_public_to_vpc2" {
+  route_table_id         = aws_route_table.vpc1_public_routetable.id
   destination_cidr_block = aws_vpc.vpc2.cidr_block
-  transit_gateway_id     = aws_ec2_transit_gateway.transit-gateway.id
+  transit_gateway_id     = aws_ec2_transit_gateway.transit_gateway.id
+
+  depends_on = [aws_ec2_transit_gateway.transit_gateway]
 }
 
 
 # Route in VPC2 private route table to reach VPC1
-resource "aws_route" "vpc2-to-vpc1" {
-  route_table_id         = aws_route_table.vpc2-private-routetable.id
+resource "aws_route" "vpc2_to_vpc1" {
+  route_table_id         = aws_route_table.vpc2_private_routetable.id
   destination_cidr_block = aws_vpc.vpc1.cidr_block
-  transit_gateway_id     = aws_ec2_transit_gateway.transit-gateway.id
+  transit_gateway_id     = aws_ec2_transit_gateway.transit_gateway.id
+
+  depends_on = [aws_ec2_transit_gateway.transit_gateway]
 }
 
 # Route in VPC2 public route table to reach VPC1 (if needed)
-resource "aws_route" "vpc2-public-to-vpc1" {
-  route_table_id         = aws_route_table.vpc2-public-routetable.id
+resource "aws_route" "vpc2_public_to_vpc1" {
+  route_table_id         = aws_route_table.vpc2_public_routetable.id
   destination_cidr_block = aws_vpc.vpc1.cidr_block
-  transit_gateway_id     = aws_ec2_transit_gateway.transit-gateway.id
+  transit_gateway_id     = aws_ec2_transit_gateway.transit_gateway.id
+
+  depends_on = [aws_ec2_transit_gateway.transit_gateway]
 }

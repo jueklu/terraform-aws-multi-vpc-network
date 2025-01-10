@@ -1,40 +1,40 @@
 # VPC1 ID
-output "VPC1-ID" {
+output "VPC1_ID" {
   value = aws_vpc.vpc1.id
 }
 
 # Public Subnet ID
-output "VPC1-Public-Subnet-IDs" {
+output "VPC1_Public_Subnet_IDs" {
   value = [
-    aws_subnet.vpc1-subnet-public-us-east-1a.id
+    aws_subnet.vpc1_subnet_public1.id
   ]
 }
 
 # Private Subnet IDs
-output "VPC1-Private-Subnet-IDs" {
+output "VPC1_Private_Subnet_IDs" {
   value = [
-    aws_subnet.vpc1-subnet-private-us-east-1b.id,
-    aws_subnet.vpc1-subnet-private-us-east-1c.id
+    aws_subnet.vpc1_subnet_private1.id,
+    aws_subnet.vpc1_subnet_private2.id
   ]
 }
 
 
 # Public Routing Table ID
-output "VPC1-Public-Route-Table-ID" {
-  value = aws_route_table.vpc1-public-routetable.id
+output "VPC1_Public_Route_Table_ID" {
+  value = aws_route_table.vpc1_public_routetable.id
 }
 
 # Private Routing Table ID
-output "VPC1-Private-Route-Table-ID" {
-  value = aws_route_table.vpc1-private-routetable.id
+output "VPC1_Private_Route_Table_ID" {
+  value = aws_route_table.vpc1_private_routetable.id
 }
 
 # Internet Gateway ID
-output "VPC1-Internet-Gateway-ID" {
-  value = aws_internet_gateway.vpc1-igw.id
+output "VPC1_Internet_Gateway_ID" {
+  value = aws_internet_gateway.vpc1_igw.id
 }
 
 # NAT Gateway ID
-output "VPC1-NAT-Gateway-ID" {
-  value = aws_nat_gateway.vpc1-nat-gw.id
+output "VPC1_NAT_Gateway_ID" {
+  value = aws_nat_gateway.vpc1_nat_gw.id
 }

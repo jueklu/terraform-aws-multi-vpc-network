@@ -1,5 +1,6 @@
 # Elastic IP (EIP) for NAT Gateway
-resource "aws_eip" "vpc1-nat-gw-eip" {
+resource "aws_eip" "vpc1_nat_gw_eip" {
+  provider = aws.aws_region
   domain = "vpc"
 
   tags = {
@@ -9,20 +10,22 @@ resource "aws_eip" "vpc1-nat-gw-eip" {
 }
 
 # NAT Gateway
-resource "aws_nat_gateway" "vpc1-nat-gw" {
-  allocation_id = aws_eip.vpc1-nat-gw-eip.id
-  subnet_id     = aws_subnet.vpc1-subnet-public-us-east-1a.id
+resource "aws_nat_gateway" "vpc1_nat_gw" {
+  provider = aws.aws_region
+  allocation_id = aws_eip.vpc1_nat_gw_eip.id
+  subnet_id     = aws_subnet.vpc1_subnet_public1.id
 
   tags = {
     Name        = "VPC1 NAT-GW"
     Env         = "Production"
   }
 
-  depends_on = [aws_internet_gateway.vpc1-igw]
+  depends_on = [aws_internet_gateway.vpc1_igw]
 }
 
 # Internet Gateway
-resource "aws_internet_gateway" "vpc1-igw" {
+resource "aws_internet_gateway" "vpc1_igw" {
+  provider = aws.aws_region
   vpc_id = aws_vpc.vpc1.id
 
   tags = {

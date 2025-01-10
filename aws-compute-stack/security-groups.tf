@@ -1,5 +1,6 @@
 # VPC1: Security Group for SSH Access and Ping
 resource "aws_security_group" "vpc1_sg" {
+  provider = aws.aws_region
   name        = "VPC1-SG"
   description = "Security group for SSH access and ping"
   vpc_id      = var.vpc1_id
@@ -38,6 +39,7 @@ resource "aws_security_group" "vpc1_sg" {
 
 # VPC1: Security Group for SSH Access and Ping
 resource "aws_security_group" "vpc2_sg" {
+  provider = aws.aws_region
   name        = "VPC2-SG"
   description = "Security group for SSH access and ping"
   vpc_id      = var.vpc2_id
